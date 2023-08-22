@@ -16,6 +16,7 @@
     "fix": "npm-run-all fix:*"
   },
   "devDependencies": {
+    "@invictus.codes/nuxt-vuetify": "^0.3.0",
     "@nuxt/eslint-config": "^0.1.1",
     "@types/node": "^18",
     "eslint": "^8.41.0",
