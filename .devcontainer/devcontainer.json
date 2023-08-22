@@ -1,0 +1,35 @@
+{
+  "name": "Node env",
+  "build": {
+    "dockerfile": "../Dockerfile",
+    "target": "dev"
+  },
+  "remoteUser": "node",
+  "shutdownAction": "none",
+  "features": {
+    "docker-in-docker": {
+      "version": "latest"
+    }
+  },
+  "runArgs": ["--init"],
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "editor.codeActionsOnSave": {
+          "source.fixAll": false,
+          "source.fixAll.eslint": true
+        },
+        "[json][typescript][vue]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        }
+      },
+      "extensions": [
+        "Vue.volar",
+        "Vue.vscode-typescript-vue-plugin",
+        "christian-kohler.path-intellisense",
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode"
+      ]
+    }
+  }
+}
