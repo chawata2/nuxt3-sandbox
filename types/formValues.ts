@@ -1,10 +1,13 @@
-export interface FormValues {
-  text1: string
-  text2: number
-  childs: ChildValues[]
+import { Prisma } from '@prisma/client'
+
+type PostForm = {
+  title: string | null
+  conteint: string | null
+  published: boolean
 }
 
-export interface ChildValues {
-  child1: string
-  child2: boolean
+export type UserForm = {
+  email: string | null
+  name: string | null
+  posts: PostForm[]
 }
