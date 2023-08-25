@@ -1,33 +1,10 @@
 <script setup lang="ts">
-import { Prisma } from '@prisma/client'
+import type { InternalApi } from 'nitropack'
+const flag = false
 
-const email = ref<string | null>(null)
-const name = ref<string | null>(null)
-
-// https://www.prisma.io/docs/concepts/components/prisma-client/null-and-undefined
-// undifindは何もしないを意味する
-// nullはnull値
-
-const formValue = ref<Prisma.UserCreateInput>({
-  email: '',
-  name: null,
-  posts: {
-    create: [
-      {
-        title: '',
-        content: null,
-        published: undefined
-      }
-    ]
-  }
-})
-
-type PostsInput = {
-  posts: Prisma.PostCreateInput[]
-}
-const formValue2 = ref<Prisma.UserCreateWithoutPostsInput & PostsInput>({
-  email: '',
-  name: null,
+const formValue = ref<UserCreateForm>({
+  email: undefined,
+  name: undefined,
   posts: []
 })
 
@@ -41,14 +18,21 @@ const rules = {
   }
 }
 
+let url: string = '/api/users'
+if (flag) {
+  url = `/api/users/asdf`
+}
+
 const onSubmit = async () => {
-  const { data, error } = await useFetch('/api/users', {
-    method: 'POST',
+  // useFetchのurlに変数を指定するとdataの型がunknownになるので、型を明示する必要がある。
+  // 新規作成と更新のAPIレスポンスは同一なのでどちらかの型を指定する。
+  const { data, error } = await useFetch<InternalApi['/api/users']['post']>(url, {
+    method: 'post',
     body: {
-      email: email.value,
-      name: name.value
+      email: formValue.value.email,
+      name: formValue.value.name
     }
-  })
+  } as Object)
 
   if (error.value) {
     throw createError({
@@ -64,7 +48,7 @@ const onSubmit = async () => {
 <template>
   <v-form v-model="valid" @submit.prevent="onSubmit">
     <v-text-field
-      v-model="email"
+      v-model="formValue.email"
       type="email"
       label="email"
       :rules="[rules.required, rules.emailFormat]"
